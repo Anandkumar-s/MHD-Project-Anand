@@ -91,6 +91,8 @@
         Thus studying galactic mean-field dynamos is motivated by the desire to understand the fundamental role that magnetic fields play in shaping the dynamics and evolution of galaxies, as well as their broader implications for astrophysics and cosmology.<br>
         In this website, I am going to look at the difference between &#945;-&#937; Dynamo and &#945;<sup>2</sup> Dynamo.Trying to find out the different aspect that influences the working of the Dynamo and try calculate the Critical values of these which control the dynamo effects.<br>
         Method we try to solve the induction equation by assuming the symmertic around phi(so phi derivatives is zero) and try to solve these in z variable at some fixed r value.The method used to solved is the 6th order finite difference for spatial derivatives and RK4 method for time evolution.
+        Then I simulated the kinematic regime of both dynamo to observe behavior of magnetic fields.<br>
+        The Solution we got for &#945;<sup>2</sup> Dynamo are oscillatory in nature ,doesn't attain some dominant eigenmode,while &#945;-&#937; Dynamo attains specific dominant eigenmode even if we provide some alpha function only thing matters here,is Dynamo number D should be greater than some critical Dynamo number D<sub>c</sub>.
     </section>
     <section id="introduction">
         <h2>Introduction</h2>
@@ -108,13 +110,13 @@ Induction equations (for each component of mangetic field) are following
 <div id="equation">
 $$\frac{\partial B_r}{\partial t}=-\frac{V_r}{r}\frac{\partial }{\partial r}(r*B_r)+\frac{\partial }{\partial z}(V_z*B_r)-\frac{\partial }{\partial z}(\alpha*B_{\phi})+\eta_t(\frac{\partial }{\partial r}(\frac{\partial }{r \partial r}(r B_{\phi}))+\frac{\partial^2 B_r}{\partial z ^2})$$
 </div>
-$$\frac{\partial B_{\phi}}{\partial t}=-q\Omega B_r-\frac{\partial }{\partial r}(V_r*B_{\phi})+\frac{\partial }{\partial z}(V_z*B_{\phi})-\frac{\partial }{\partial z}(\alpha*B_r)+\eta_t(\frac{\partial }{\partial r}(\frac{\partial }{r \partial r}(r B_{\phi}))+\frac{\partial^2 B_r}{\partial z ^2})$$
+$$\frac{\partial B_{\phi}}{\partial t}=-q\Omega B_r-\frac{\partial }{\partial r}(V_r*B_{\phi})+\frac{\partial }{\partial z}(V_z*B_{\phi})-\frac{\partial }{\partial z}(\alpha*B_r)+\eta_t(\frac{\partial }{\partial r}(\frac{\partial }{r \partial r}(r B_{\phi}))+\frac{\partial^2 B_{\phi}}{\partial z ^2})$$
 I'm using the unitless equation which we findout in Assignment-3,
 <div id="equation">
-    $$\frac{\partial B_r}{\partial t}=-\frac{V_r}{r}\frac{\partial }{\partial r}(r*B_r)+\frac{\partial }{\partial z}(V_z*B_r)-\frac{\partial }{\partial z}(\alpha*B_{\phi})+\eta_t(\frac{\partial }{\partial r}(\frac{\partial }{r \partial r}(r B_{\phi}))+\frac{\partial^2 B_r}{\partial z ^2})$$
+    $$\frac{\partial B_r'}{\partial t'}=-\frac{V_r'}{r'}\frac{\partial }{\partial r'}(r'*B_r')+\frac{\partial }{\partial z'}(V_z'*B_r')-\frac{\partial }{\partial z'}(\alpha'*B_{\phi}')+(\frac{\partial }{\partial r'}(\frac{\partial }{r' \partial r'}(r' B_{\phi}'))+\frac{\partial^2 B_r'}{\partial z'^2})$$
     </div>
-    $$\frac{\partial B_{\phi}}{\partial t}=-q\Omega B_r-\frac{\partial }{\partial r}(V_r*B_{\phi})+\frac{\partial }{\partial z}(V_z*B_{\phi})-\frac{\partial }{\partial z}(\alpha*B_r)+\eta_t(\frac{\partial }{\partial r}(\frac{\partial }{r \partial r}(r B_{\phi}))+\frac{\partial^2 B_r}{\partial z ^2})$$
-
+    $$\frac{\partial B_{\phi}'}{\partial t'}=-q\Omega' B_r'-\frac{\partial }{\partial r'}(V_r'*B_{\phi}')+\frac{\partial }{\partial z'}(V_z'*B_{\phi}')-\frac{\partial }{\partial z}(\alpha'*B_r')+(\frac{\partial }{\partial r'}(\frac{\partial }{r' \partial r'}(r' B_{\phi}'))+\frac{\partial^2 B_{\phi}'}{\partial z'^2})$$
+All terms with Magnetic field is in unit of B<sub>0</sub>(any unit based of seed field),distances are of units of h<sub>0</sub>, time is of the unit t<sub>0</sub>=h<sub>0</sub><sup>2</sup>/&#951;<sub>t</sub> and velocity term of the unit of h<sub>0</sub>/t<sub>0</sub>.
 </section>
 <section id="Computational Methods">
     <h2>Computational Methods</h2>
@@ -133,8 +135,16 @@ I'm using the unitless equation which we findout in Assignment-3,
     Now i use Boundary Condition to fixed value of function, i make the external 3 points as Ghost zone(at each boundary) which such that to make boundary point to be fixed(Moslty i use Anti-symmertric Ghost Zone and maked the Boundary values as Zero).<br>
 
     After this do, we will go for just time evolution of the all function RHS to equation where LHS is time derivatives.
-    These time Evolution is done using the Fourth-Order Runge-Kutta method,which is an iterative method used to approximate solutions to initial value problems involving ODEs.Now
-
+    These time Evolution is done using the Fourth-Order Runge-Kutta method,which is an iterative method used to approximate solutions to initial value problems involving ODEs.Now here evolution equation in general is of the form,
+    $$\frac{\partial \bar{B}}{\partial t}=f(\bar{B})$$
+    Now using RK4 Time stepping to evolve in time(here dt is discrete time steping unit)
+    $$K1=dt*f(\bar{B})$$
+    $$K2=dt*f(\bar{B}+K1/2)$$
+    $$K3=dt*f(\bar{B}+K2/2)$$
+    $$K4=dt*f(\bar{B}+K3)$$
+    Then the 'dt' evolution of B is 
+    $$\bar{B}(t+dt)=B(t)+\frac{1}{6}(K1+2K2+3K3+K4)$$
+    This step done at finite number of times(N) to get the time evolution of B at time, T=Ndt.
     </p>
     <h3>Plotting Methods</h3>
     I am plotting the r and phi component of B ,with some specific times.Now the problem here happens, when the ampilitude the some time is B very high in magnitude,
@@ -183,6 +193,8 @@ Here, we use the &#945; functions as
 $$\alpha' =\alpha_0' sin(\pi z)$$
 And
 $$\alpha' =\alpha_0'* z$$
+<br>
+<a href="https://anandkumar-s.github.io/MHDproject-task3/">Click Here</a> to go to Task-3 file which contains code and rough plots for Task-3.
     </section>
 
     <section id="Simulation Results">
@@ -305,18 +317,81 @@ $$\alpha' =\alpha_0'* z$$
         We can see that the Net or total magnetic field strength (amplitude)is increases without change in the shape of overall magnetic field in all time steps.This is Net magnetic field dominate mode
         ,but when we look at the each components itself. Its not becoming a some normal fixed function time the exponential term, this indiuvidual terms oscillates between each other in time.
         <br> Let's look at each component reading for different time steps.
+        <div class="image-container">
+        <img src="images/aaplots1.png" alt="Image 1">
+        <img src="images/aaplots2.png" alt="Image 2">
+        <img src="images/aaplots3.png" alt="Image 3">
+        <img src="images/aaplots4.png" alt="Image 4">
+        </div>
+        From these graphs and plots we could see that the shap of B<sub>r</sub> and B<sub>&#966;</sub> terms are oscillating there shapes and they comes to one shape after around approximate 60 (60 t<sub>0</sub>) it will comw back to same state and it will contiues.In this same time its ampilitude get exponetially growing.
+        And from the curve of the Net Magnetic which show as consistent shape for fixed Alpha function and its is exponetially growing without any oscillation or change in shape.
+        Thus overall &#945;-&#937; Dynamo and &#945;<sup>2</sup> Dynamo both amplifies the seed magnetic field under the condition where some constraints are above some critical value(which I calculated for 2 examples).
+        This method and each individual components evoultion with time is different in both dynamos, even the Net Magnetic field eigenmode shapes also changes with parameter, which is controlling the dynamo.
+       <h2>Difference between &#945;-&#937; Dynamo and &#945;<sup>2</sup> Dynamo</h2>
+       <h3>&#945;<sup>2</sup> Dynamo</h3>
+       <ul>
+        <li>Utilizes the &#945;-effect, where differential rotation generates a mean magnetic field from an initially weak seed field</li>
+        <li>Requires helical turbulence to generate the &#945;-effect, often associated with the twisting of fluid motions, convection, shear flows, or the magneto-rotational instability (MRI) in astrophysical contexts</li>
+        <li>Operates effectively in systems where there is significant turbulence and differential rotation, example such as in the Sun's convective zone</li>
+        <li>&#945;<sup>2</sup> dynamo relies primarily on turbulent motions to generate magnetic fields</li>
+        <li>Limitation to explain the maintenance of large-scale magnetic fields over long periods without additional mechanisms, as turbulence tends to act to disperse magnetic fields rather than concentrate them.</li>
+        <li>The solution to &#945;<sup>2</sup> Dynamo Oscillatory in nature.</li>
+       </ul>
+       <h3>&#945;-&#937; Dynamo</h3>
+       <ul>
+        <li>Combines the &#945;-effect with the &#937;-effect, where differential rotation acts on a pre-existing magnetic field to regenerate and amplify it</li>
+        <li>Requires both differential rotation and a pre-existing magnetic field.The differential rotation provides the twisting necessary to amplify the field, while the pre-existing field serves as the seed for amplification.</li>
+        <li>Provides a mechanism for maintaining and amplifying large-scale magnetic fields over long periods.</li>
+        <li>Often observed in astrophysical bodies with well-defined differential rotation and magnetic fields, like stars and galaxies.
+            Example, as observed in the Sun's tachocline, where the transition between the radiative and convective zones leads to a significant shear layer that can amplify magnetic fields</li>
+        <li>The solution to &#945;<sup>2</sup> Dynamo are steadily growing in nature</li>
+        <li>Solution doesn't depends on &#945; effect value if we wait for long time to evolve the function</li>
+        <li>Solutions have same kind of spatial variance for all alphas and only depends on whether D greater than or less than D<sub>c</sub>(which determines decay or growth)</li>
+       </ul>
+       
         <!-- Embed your simulation here -->
         <!-- <iframe src="simulation.html" width="100%" height="600px"></iframe> -->
     </section>
 
     <section id="Conclusion">
         <h2>Conclusion</h2>
+        Through our exhaustive examination of galactic mean-field dynamos, we have diligently scrutinized and extracted significant insights from the simulations and findings garnered. 
+        Throughout our analysis, numerous pivotal observations have surfaced, unveiling the nuanced dynamics governing cosmic magnetic fields within galactic structures. These observations have not only deepened our understanding of the intricate interplay between magnetic fields and galactic processes but also provided valuable implications for broader astrophysical phenomena.
+        <ul>
+            <li>From my Analysis,I could see that for both &#945;-&#937; Dynamo and &#945;<sup>2</sup> Dynamo require some kind of critical parameter values to be need for the Dynamo to grow,else it would decay as diffusion equation(of Task-1) over certain time.
+                The former effect need to satisfy the Dynamo Number (D) to greater than Critcal Dynamo Number(D<sub>c</sub>),which intern depends on the spatial distribution of &#945; .</li>
+            <li>The solution to &#945;-&#937; Dynamo and &#945;<sup>2</sup> Dynamo doesn't depends on seed field under the kinematic regime </li>
+            <li>Both Dynamo Net magnetic field under kinematic regime</li>
+            <li>Numerical Solutions to one dimensional(in z) &#945;<sup>2</sup> Dynamo reveals oscillatory solution for each components</li>
+            <li>These oscillation are realtively insensitive to our choice of Alpha's spatial distribution (As per, we had analyzed two examples of Alpha).</li>
+
+            <li>Future extensions can be made study about the oscillation frequency dependance of the mean helicity extremums and boundary of the regions and also Non-linear effects of Alpha and how its affects the Oscillations.</li>
+           <li>Modeling Complexity,Modeling the &#945;<sup>2</sup> dynamo primarily involves simulating turbulent flows and their interaction with magnetic fields, which can be computationally intensive but less complex than the Alpha-Omega dynamo.
+            The Alpha-Omega dynamo requires accurate modeling of both turbulent motions and differential rotation, making it more computationally challenging and requiring sophisticated numerical techniques for precise measurement without loosing resolution.</li>
+        </ul>
+
+        In conclusion, our comprehensive simulations of the &#945;<sup>2</sup> and Alpha-Omega dynamos have provided invaluable insights into the generation and amplification of magnetic fields within astrophysical systems. Through meticulous observation and analysis, we have gained a deeper understanding of the intricate dynamics governing cosmic magnetism within galactic structures.
+
+<br>The simulations of the &#945;<sup>2</sup> dynamo have elucidated the crucial role of turbulence in initiating and sustaining magnetic field generation. However, we have also noted limitations regarding the maintenance of large-scale magnetic fields over extended periods, highlighting the challenges posed by turbulence in concentrating magnetic energy.<br>
+
+Similarly, our investigations into the Alpha-Omega dynamo have underscored the significance of differential rotation in amplifying pre-existing magnetic fields. While these simulations have shed light on the mechanisms driving magnetic field evolution, they have also revealed constraints related to the availability of pre-existing magnetic fields and the complexity of accurately modeling turbulent and rotational dynamics.<br>
+
+Overall, our simulations have deepened our understanding of the interplay between magnetic fields and galactic processes, offering valuable insights into the broader astrophysical phenomena shaping our universe. Moving forward, further refinement of our models and continued observational studies will be essential for advancing our understanding of galactic mean-field dynamos and their role in shaping the cosmos.
+
+
+
         <!-- Add your simulation results and analysis here -->
         <!-- <p>Simulation results show...</p> -->
     </section>
 
     <section id="references">
         <h2>References</h2>
+        <ol>
+            <li>P456 Class Notes and Assignments</li>
+            <li>Brandenburg, A. (2019). Computational aspects of astrophysical MHD and turbulence. In Advances in nonlinear dynamos (pp. 269-344). CRC Press</li>
+            <li>Shukurov, A., & Subramanian, K. (2021),Astrophysical Magnetic Fields: From Galaxies to the Early Universe. Cambridge: Cambridge University Press</li>
+            <li>Oscillatory alpha-squared dynamo - Numerical investigation Article in Astronomische Nachrichten · January 1987</li>
+        </ol>
         <!-- Include references to papers, books, or websites -->
         <!-- <ul>
             <li>Author, A. (Year). Title. Journal, Volume(Issue), Pages.</li>
@@ -326,7 +401,7 @@ $$\alpha' =\alpha_0'* z$$
 </main>
 
 <footer>
-    <p>&copy; 2024 YourWebsiteName. All rights reserved.</p>
+    <p>&copy; 2024 https://anandkumar-s.github.io/MHD-Project-Anand. All rights reserved.</p>
 </footer>
 
 </body>
