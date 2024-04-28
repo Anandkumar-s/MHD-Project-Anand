@@ -78,20 +78,30 @@
     <a href="#Task-1">Task-1</a>
     <a href="#Task-2">Task-2</a>
     <a href="#Task-3">Task-3</a>
-    <a href="#simulation">Simulation</a>
-    <a href="#results">Results</a>
+    <a href="#Simulation Results">Simulation Results</a>
+    <a href="#Conclusion">Conclusion</a>
     <a href="#references">References</a>
 </nav>
 
 <main>
     <section id="Abstract">
         <h2>Abstract</h2>
+        Studying galactic mean-field dynamos is motivated by a desire to understand the origin and evolution of magnetic fields in galaxies, including our own Milky Way. These magnetic fields play crucial roles in various astrophysical processes, influencing the dynamics of interstellar gas, the formation and evolution of stars, and even the propagation of cosmic rays.
+        Magnetic fields are believed to have implications for cosmology, potentially affecting the large-scale structure of the universe and influencing processes such as galaxy clustering and the formation of cosmic filaments. By studying galactic mean-field dynamos, scientists aim to understand how magnetic fields contribute to the broader cosmological framework.
+        Thus studying galactic mean-field dynamos is motivated by the desire to understand the fundamental role that magnetic fields play in shaping the dynamics and evolution of galaxies, as well as their broader implications for astrophysics and cosmology.<br>
+        In this website, I am going to look at the difference between &#945;-&#937; Dynamo and &#945;<sup>2</sup> Dynamo.Trying to find out the different aspect that influences the working of the Dynamo and try calculate the Critical values of these which control the dynamo effects.<br>
+        Method we try to solve the induction equation by assuming the symmertic around phi(so phi derivatives is zero) and try to solve these in z variable at some fixed r value.The method used to solved is the 6th order finite difference for spatial derivatives and RK4 method for time evolution.
     </section>
     <section id="introduction">
         <h2>Introduction</h2>
         <p>
-            Introduction to your Magnetohydrodynamics (MHD) simulation.
+            Introduction to your Magnetohydrodynamics (MHD).
         </p>
+        Studying the Alpha^2 dynamo and Alpha-omega dynamo models is motivated by the quest to understand the mechanisms responsible for generating and sustaining magnetic fields in astrophysical systems, particularly in stars and galaxies.
+        Particularly in Alpha^2 Dynamo,provides a fundamental framework for understanding how magnetic fields are generated through the interaction of turbulent fluid motions and magnetic fields themselves.It explaining the generation of magnetic fields in stars and galaxies where turbulence is prevalent.
+        Also the Alpha^2 dynamo model depends on the interplay between convection and differential rotation in astrophysical bodies.Studying this model allows scientists to better understand how these fluid motions contribute to the amplification and maintenance of magnetic fields.<br>
+        In Alpha-Omega Dynamo,model extends the Alpha^2 dynamo by considering the role of differential rotation in generating magnetic fields.It is relevant for systems with a strong differential rotation, such as the Sun and rapidly rotating stars.The Alpha-omega dynamo model predicts the formation of a toroidal magnetic field component, which is aligned with the rotation axis of the astrophysical object.
+        This prediction matches observations of magnetic fields in many stars and galaxies, providing insights into their origin.<br>
         In this MHD Project
 I have to solve for Induction equation , where i solve  B<sub>r</sub> and B<sub> &#966; </sub> in z.(neglect the r derivatives in the induction equation)
 Induction equations (for each component of mangetic field) are following
@@ -175,25 +185,132 @@ And
 $$\alpha' =\alpha_0'* z$$
     </section>
 
-    <section id="simulation">
-        <h2>Simulation</h2>
+    <section id="Simulation Results">
+        <h2>Simulation Results</h2>
         <h3>&#945;-&#937; Dynamo</h3>
-        Here, for this simulation I am using the alpha function as both z as well as sin(pi*z).
-        Intially we findout the Critical Dynamo number for both alpha functions from the same code in Task-2, 
+        Here, for this simulation I am using the alpha function as both z as well as sin(pi*z).<br>
+        Intially we will findout the Critical Dynamo number for both alpha functions from the same code in Task-2, 
         $$|D_c|=12.51953125 (\,for\,\alpha=z)$$
         $$|D_c|=12.51953125 (\,for\,\alpha=10z)$$
         $$|D_c|=8.06640625  (\,for\,\alpha=sin(\pi z))$$
         $$|D_c|=8.06640625  (\,for\,\alpha=10sin(\pi z))$$
+        Note:Both the outputs for different values are done done for a long time(assume 50-130 t<sub>0</sub> as infinite time) and here i am providing a seed field of sin(pi*z) for phi component and zero for r component. Also with change in seed doesn't matter if we wait for a long time to evloution of equation.
+        All the outputs will be in kinematic region after long time evloution.<br>
+        <h4>Look at the &#945;-&#937; Dynamo with D &lt D<sub>c</sub></h4>
+        Lets take D=(-5)
+        <h5>&#945;=(z)</h5>
+        <div class="image-container">
+            <img src="images/ao(1z)(-5)br.png" alt="Image 1">
+            <img src="images/ao(1z)(-5)bphi.png" alt="Image 2">
+            <img src="images/ao(1z)(-5)bnet.png" alt="Image 3">
+            <img src="images/ao(1z)(-5)decay.png" alt="Image 4">
+        </div>
+        Here I can see from 3 plot, the net magnetic divided by maximum amilitude of net magnetic field from this we could see the evolution of shape of function in time,these all curve have have shape and superimpose to one figure, this gives that the solution under this condition is decaying for all values of z.<br>
+        Similar results also get if we change the &#945;<div class=""></div>
+        <h4>Look at the &#945;-&#937; Dynamo with D &gt D<sub>c</sub></h4>
+        Under Infinite time evolution, solution becomes kinematic region<br>
+        Lets take D=(-20)<br>
+        Take  &#945;=sin(&pi; z)
+        <div class="image-container">
+            <img src="images/ao(1sin)(-20)br.png" alt="Image 1">
+            <img src="images/ao(1sin)(-20)bphi.png" alt="Image 2">
+            <img src="images/ao(1sin)(-20)bnet.png" alt="Image 3">
+            <img src="images/ao(1sin)(-20)decay.png" alt="Image 4">
+        </div>
+        From the fitted plot-4, the growth rate equals =1.32380882<br>
+        Take &#945;=500sin(&pi; z)
+        <div class="image-container">
+            <img src="images/ao(500sin)(-20)br.png" alt="Image 1">
+            <img src="images/ao(500sin)(-20)bphi.png" alt="Image 2">
+            <img src="images/ao(500sin)(-20)bnet.png" alt="Image 3">
+            <img src="images/ao(500sin)(-20)decay.png" alt="Image 4">
+        </div>
+        From the fitted plot-4, the growth rate equals =1.32380882<br>
+        Take &#945;=(z)
+        <div class="image-container">
+            <img src="images/ao(1z)(-20)br.png" alt="Image 1">
+            <img src="images/ao(1z)(-20)bphi.png" alt="Image 2">
+            <img src="images/ao(1z)(-20)bnet.png" alt="Image 3">
+            <img src="images/ao(1z)(-20)decay.png" alt="Image 4">
+        </div>
+        From the fitted plot-4, the growth rate equals =0.62134301<br>
+        Take &#945;=500(z)
+        <div class="image-container">
+            <img src="images/ao(500z)(-20)br.png" alt="Image 1">
+            <img src="images/ao(500z)(-20)bphi.png" alt="Image 2">
+            <img src="images/ao(500z)(-20)bnet.png" alt="Image 3">
+            <img src="images/ao(500z)(-20)decay.png" alt="Image 4">
+        </div>
+        From the fitted plot-4, the growth rate equals =0.62134301<br>
+
+        Now lets look at the output magnetic field we get for &#945;-&#937; Dynamo with different Alpha function(Amplitude of Alpha functions doesn't matter, only shape does matter).<br>
+        Now from the results, i can see that above the Critical dynamo number range, increase in Amplitude of Alpha functions doesn't change growth rate but the overall shape and function form doesn't change within this speculated time.<br>
+        Now in theory if the wait for infinite time, the we can say that &#945;-&#937; Dynamo doesn't depends on the amplitude of Alpha effect and its functional form.<br>
+        From this results, i can conclude in absolute sense that &#945;-&#937; Dynamo will have same growth rate for same alpha functional not affected by ampilitude alpha function but having the different functional form of same Alpha magmitude will have different growth rate.(This makes sense, given that we have done finite evolution only(not actually infinite time)).<br>
         
-        Lets check the both the outputs for different outputs after a long time(assume as infinite time).Here i am providing a seed field of sin(pi*z) for phi component and zero for r component.
+        <h3>&#945;<sup>2</sup> Dynamo</h3>
+        Here we do simulation with different alpha functional as well as the ampilitude for which the &#945;<sup>2</sup> Dynamo has to work.<br>
+        <h5>Lets check the ampilitude of alpha function and working of &#945;<sup>2</sup> Dynamo </h5>
+        Lets take &#945;=5sin(&pi;z)
+        <div class="image-container">
+            <img src="images/aa(5sin)br.png" alt="Image 1">
+            <img src="images/aa(5sin)bphi.png" alt="Image 2">
+            <img src="images/aa(5sin)bneto.png" alt="Image 3">
+            <img src="images/aa(5sin)decay.png" alt="Image 4">
+           
+        </div>
+        From the fitted plot-4, the growth rate equals =  -0.01881279<br>
+        Lets take &#945;=5(z)
+        <div class="image-container">
+            <img src="images/aa(5z)br.png" alt="Image 1">
+            <img src="images/aa(5z)bphi.png" alt="Image 2">
+            <img src="images/aa(5z)bneto.png" alt="Image 3">
+            <img src="images/aa(5z)decay.png" alt="Image 4">
+           
+        </div>
+        From the fitted plot-4, the growth rate equals = -1.60126267<br>
+        Lets take &#945;=8.5sin(&pi;z)
+        <div class="image-container">
+            <img src="images/aa(8.5sin)br.png" alt="Image 1">
+            <img src="images/aa(8.5sin)bphi.png" alt="Image 2">
+            <img src="images/aa(8.5sin)bro.png" alt="Image 3">
+            <img src="images/aa(8.5sin)bphio.png" alt="Image 4">
+            <img src="images/aa(8.5sin)bneto.png" alt="Image 5">
+            <img src="images/aa(8.5sin)decay.png" alt="Image 6">
+           
+        </div>
+        From the fitted plot-4, the growth rate equals = 5.45061393<br>
+
+        Lets take &#945;=8.5(z)
+        <div class="image-container">
+            <img src="images/aa(8.5z)br.png" alt="Image 1">
+            <img src="images/aa(8.5z)bphi.png" alt="Image 2">
+            <img src="images/aa(8.5z)bro.png" alt="Image 3">
+            <img src="images/aa(8.5z)bphio.png" alt="Image 4">
+            <img src="images/aa(8.5z)bneto.png" alt="Image 5">
+            <img src="images/aa(8.5z)decay.png" alt="Image 6">
+           
+        </div>
+        From the fitted plot-4, the growth rate equals = 0.358349989<br>
         
-        
+        These results give us an hint that there should exist come miniumum ampilitude for different alpha functional in order for growth of &#945;<sup>2</sup> Dynamo to happen.<br>
+        Something like critical Dynamo number required for &#945;-&#937; Dynamo, here &#945;<sup>2</sup> Dynamo requires a critical &#945;<sub>c</sub> ampilitude. (Note:this &#945;<sub>c</sub> maybe depends on the &#945; functional used)<br>
+        Now i will calculate this critical &#945;<sub>c</sub> ampilitude value for each &#945;(z) functionals.
+        <h3>Critical &#945;<sub>c</sub> ampilitude</h3>
+        $$\alpha_c=8.033203125 \,(for\, (z) \,)$$
+        $$\alpha_c=5.015625 \,(for\, (sin(\pi z)) \,)$$
+        From the growth rate above, we can see that when &#945; &gt &#945;<sub>c</sub>,then the growth rate goes as rapidly more steadliy than the &#945;-&#937; Dynamo.
+        <h2>Now Analysis of the solution to &#945;<sup>2</sup> Dynamo</h2>
+        From the two example cases, Final solution (Net Magnetic field) depends on the function of alpha.Unlike in the case &#945;-&#937; Dynamo,where whatever the D and &#945; after a long time we get the same output Net magnetic field(Dominate Eigenmode).
+        We can see that the Net or total magnetic field strength (amplitude)is increases without change in the shape of overall magnetic field in all time steps.This is Net magnetic field dominate mode
+        ,but when we look at the each components itself. Its not becoming a some normal fixed function time the exponential term, this indiuvidual terms oscillates between each other in time.
+        <br> Let's look at each component reading for different time steps.
         <!-- Embed your simulation here -->
         <!-- <iframe src="simulation.html" width="100%" height="600px"></iframe> -->
     </section>
 
-    <section id="results">
-        <h2>Results</h2>
+    <section id="Conclusion">
+        <h2>Conclusion</h2>
         <!-- Add your simulation results and analysis here -->
         <!-- <p>Simulation results show...</p> -->
     </section>
@@ -214,4 +331,3 @@ $$\alpha' =\alpha_0'* z$$
 
 </body>
 </html>
-
