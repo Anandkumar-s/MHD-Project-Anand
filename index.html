@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magnetohydrodynamics Simulation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        header {
+            background-color: #222;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        nav {
+            background-color: #333;
+            padding: 10px;
+            text-align: center;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        main {
+            padding: 20px;
+        }
+
+        section {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            padding: 20px;
+        }
+
+        section h2 {
+            color: #555;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        footer {
+            background-color: #222;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+
+<header>
+    <h1> P464 Magnetohydrodynamics Simulation</h1>
+</header>
+
+<nav>
+    <a href="#Abstract">Abstract</a>
+    <a href="#introduction">Introduction</a>
+    <a href="#Computational Methods">Computational Methods</a>
+    <a href="#Task-1">Task-1</a>
+    <a href="#Task-2">Task-2</a>
+    <a href="#Task-3">Task-3</a>
+    <a href="#simulation">Simulation</a>
+    <a href="#results">Results</a>
+    <a href="#references">References</a>
+</nav>
+
+<main>
+    <section id="Abstract">
+        <h2>Abstract</h2>
+    </section>
+    <section id="introduction">
+        <h2>Introduction</h2>
+        <p>
+            Introduction to your Magnetohydrodynamics (MHD) simulation.
+        </p>
+        In this MHD Project
+I have to solve for Induction equation , where i solve  B<sub>r</sub> and B<sub> &#966; </sub> in z.(neglect the r derivatives in the induction equation)
+Induction equations (for each component of mangetic field) are following
+<div id="equation">
+$$\frac{\partial B_r}{\partial t}=-\frac{V_r}{r}\frac{\partial }{\partial r}(r*B_r)+\frac{\partial }{\partial z}(V_z*B_r)-\frac{\partial }{\partial z}(\alpha*B_{\phi})+\eta_t(\frac{\partial }{\partial r}(\frac{\partial }{r \partial r}(r B_{\phi}))+\frac{\partial^2 B_r}{\partial z ^2})$$
+</div>
+$$\frac{\partial B_{\phi}}{\partial t}=-q\Omega B_r-\frac{\partial }{\partial r}(V_r*B_{\phi})+\frac{\partial }{\partial z}(V_z*B_{\phi})-\frac{\partial }{\partial z}(\alpha*B_r)+\eta_t(\frac{\partial }{\partial r}(\frac{\partial }{r \partial r}(r B_{\phi}))+\frac{\partial^2 B_r}{\partial z ^2})$$
+I'm using the unitless equation which we findout in Assignment-3,
+<div id="equation">
+    $$\frac{\partial B_r}{\partial t}=-\frac{V_r}{r}\frac{\partial }{\partial r}(r*B_r)+\frac{\partial }{\partial z}(V_z*B_r)-\frac{\partial }{\partial z}(\alpha*B_{\phi})+\eta_t(\frac{\partial }{\partial r}(\frac{\partial }{r \partial r}(r B_{\phi}))+\frac{\partial^2 B_r}{\partial z ^2})$$
+    </div>
+    $$\frac{\partial B_{\phi}}{\partial t}=-q\Omega B_r-\frac{\partial }{\partial r}(V_r*B_{\phi})+\frac{\partial }{\partial z}(V_z*B_{\phi})-\frac{\partial }{\partial z}(\alpha*B_r)+\eta_t(\frac{\partial }{\partial r}(\frac{\partial }{r \partial r}(r B_{\phi}))+\frac{\partial^2 B_r}{\partial z ^2})$$
+
+</section>
+<section id="Computational Methods">
+    <h2>Computational Methods</h2>
+    <h3>Codes</h3>
+    <p>From the computational point of view, here we have to solve partial differential equation in time and z variables.
+    Usually all equation here, have only single time derivative term for each component in the LHS, while in RHS terms are the spatial derivatives of r and phi component of the magntic fields.<br>
+    Now,due to this nature of the equation , i am using the 2D array having 0 index as r and 1 index as phi component of magntic field.
+    For each spatial derivatives term (here in my case its only in z), i have defined functions for taking second deriavatives and first derivatives, with general input function, and functional variables.
+    Since this general function, i had used this functions for both PDE in general.<br>
+    Now for the Spatial derivative part, I have used the 6th Order finite difference method to find out the spatial derivatives.
+    $$f_i'=\frac{-f_{i-3}+9f_{i-2}-45f_{i-1}+45f_{i+1}-9f_{i+2}+f_{i+3}}{60*dz}$$
+    $$f_i''=\frac{+2f_{i-3}-27f_{i-2}+270f_{i-1}-490f_{i}+270f_{i+1}-27f_{i+2}+2f_{i+3}}{180*dz^2}$$
+    Since this is 6th Order, we will have extra 3 terms at the each boundary to be fixed based of boundary condition.
+    </p>
+    <p>
+    Now i use Boundary Condition to fixed value of function, i make the external 3 points as Ghost zone(at each boundary) which such that to make boundary point to be fixed(Moslty i use Anti-symmertric Ghost Zone and maked the Boundary values as Zero).<br>
+
+    After this do, we will go for just time evolution of the all function RHS to equation where LHS is time derivatives.
+    These time Evolution is done using the Fourth-Order Runge-Kutta method,which is an iterative method used to approximate solutions to initial value problems involving ODEs.Now
+
+    </p>
+    <h3>Plotting Methods</h3>
+    I am plotting the r and phi component of B ,with some specific times.Now the problem here happens, when the ampilitude the some time is B very high in magnitude,
+    so in effective small magnitude but essential plots are not Visible.
+     In order to see all the graphs shape and its change happens in time,I divide all the B(z) function with its supermum(sup) of B(z) for all z in domain(in simpler term maximum ampiltude of the function for all z).<br>
+     Now for Decay measurement part, mean value(in all z) of each magnetic field components value (which gives mean value of Net magnetic field) and then take square root.This function is calculated for all time uptil total stimlation time of T.
+     <br>This is then plotted as log10(mean Net B)  as function  time(t) and we fit the curve for higher time interval in which the slope of the curve becomes constant.
+    This value give Decay rate(&#947;) or Growth rate(Positive decay rate) of overall magnetic field.This gives clear idea, whether the Overall the dynamo is working or not (can be used to calculate the values of paramters at which the it would works).
+    <h3>Method used to calculate the Critical Dynamo number and Critical maximum &#945;<sub>0</sub> Values for which Growth happens
+    </h3>
+    Here,i use as dummy variable D to run the 'D' or '&#945;<sub>0</sub>' values. Now i had made all above operations as function of D and &#945;<sub>0</sub>.(Where D=0 means &#945;<sup>2</sup> Dynamo and else its &#945;-&#937; Dynamo effect)
+    Now i can vary the D value in loop, which start running upto how much precision in each value it should have(this value should be the error for this calculation).Now we run this, starting with D=0 zero value for some d and run round with D increment with d, let's say d=5.
+    Now that 5 added to D , then check whether &#947;>0, if yes then do to next round starting from previous D value and the make the d-> d/2, else then we go to next round without changing d and D will get added by d.
+    This loop will continues till the decribed error value can have in critical value, greater than the d value going to next round. In this way the convergence happens at exponential rates, and we get the Critical value without running codes many times than that with fixed value variations.
+</section>
+<section id="Task-1">
+    <h2>Task-1</h2>
+
+    <a href="https://anandkumar-s.github.io/AnandMHD.github.io/">Click Here</a> to go to Task-1 website which contains code and plots for Task-1.
+</section>
+
+<section id="Task-2">
+    <h2>Task-2</h2> 
+    <a href="https://anandkumar-s.github.io/MHDproject-task2/">Click Here</a> to go to Task-2  website which contains code and plots for Task-2.
+</section>
+<section id="Task-3">
+    <h2>Task-3</h2>
+
+Aim of this Task-3 is to find out the difference between the &#945;-&#937; Dynamo (Exactly same as I have done in Task-2) and &#945;<sup>2</sup> Dynamo effect (where we include only the Alpha effect term in the r and Phi component equations).<br>
+
+Now the equation consider for the task three is  (Only in z derivatives are consider and Velocity terms are taken as zero )<br>
+$$\frac{\partial B_r '}{\partial t'}=-\frac{\partial (\alpha ' B_{\phi}')}{\partial z'}+\frac{\partial^2 B_r'}{\partial z ^{'2}}$$
+$$\frac{\partial B_{\phi}'}{\partial t'}=-q\Omega ' B_{r} ' +\frac{\partial (\alpha ' B_{r}')}{\partial z'}+\frac{\partial^2 B_{\phi} '}{\partial z^{'2} }$$
+Note:Here I neglecting &#945;<sup>2</sup> effect in &#945;-&#937; Dynamo effect and &#937; term will be zero for &#945;<sup>2</sup> Dynamo. <br>
+Now take the Dynamo number equation as
+$$D=-\frac{q\Omega \alpha _0 h^3}{\eta _t^2}$$
+which gives under the unitless equation becomes &#945; changes as &#945;'=&#945; t<sub>0</sub>/h<sub>0</sub>(where t<sub>0</sub>=h<sub>0</sub><sup>2</sup>/&#951;<sub>t</sub>) and &#937; changes as &#937;'=&#937;*h<sub>0
+</sub><sup>2</sup>/&#951;<sub>t</sub> using this <br>
+Now the equation consider for the &#945;-&#937; Dynamo is (in unitless form is)
+$$\frac{\partial B_r '}{\partial t'}=-\frac{\partial (\alpha ' B_{\phi}')}{\partial z'}+\frac{\partial^2 B_r'}{\partial z ^{'2}}$$
+$$\frac{\partial B_{\phi}'}{\partial t'}=\frac{D}{\alpha_0 '} B_{r} '+\frac{\partial^2 B_{\phi} '}{\partial z^{'2} }$$
+And the Equation for &#945;<sup>2</sup> Dynamo effect is
+$$\frac{\partial B_r '}{\partial t'}=-\frac{\partial (\alpha ' B_{\phi}')}{\partial z'}+\frac{\partial^2 B_r'}{\partial z ^{'2}}$$
+$$\frac{\partial B_{\phi}'}{\partial t'}=+\frac{\partial (\alpha ' B_{r}')}{\partial z'}+\frac{\partial^2 B_{\phi} '}{\partial z^{'2} }$$
+Here, we use the &#945; functions as 
+$$\alpha' =\alpha_0' sin(\pi z)$$
+And
+$$\alpha' =\alpha_0'* z$$
+    </section>
+
+    <section id="simulation">
+        <h2>Simulation</h2>
+        <!-- Embed your simulation here -->
+        <!-- <iframe src="simulation.html" width="100%" height="600px"></iframe> -->
+    </section>
+
+    <section id="results">
+        <h2>Results</h2>
+        <!-- Add your simulation results and analysis here -->
+        <!-- <p>Simulation results show...</p> -->
+    </section>
+
+    <section id="references">
+        <h2>References</h2>
+        <!-- Include references to papers, books, or websites -->
+        <!-- <ul>
+            <li>Author, A. (Year). Title. Journal, Volume(Issue), Pages.</li>
+            <li>...</li>
+        </ul> -->
+    </section>
+</main>
+
+<footer>
+    <p>&copy; 2024 YourWebsiteName. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
